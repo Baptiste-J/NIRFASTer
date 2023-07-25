@@ -239,6 +239,7 @@ for ind_wv = 1:length(mesh.wv)
         [mesh.mua, mesh.mus, mesh.kappa] = calc_mua_mus(mesh, mesh.wv(ind_wv));
         
         % ---- Edit by Baptiste Jayet (20/07/2020)
+        % Addition of a constant mua region regardless of wavelength
         if isfield(mesh,'CONSTmua')
             if ~isempty(mesh.CONSTmua.number)
                 fprintf(1,'Changing mua for region number: %d\n',mesh.CONSTmua.number)
@@ -246,6 +247,15 @@ for ind_wv = 1:length(mesh.wv)
                 mesh.mua(ind) = mesh.CONSTmua.value;
                 mesh.kappa = 1./(3*(mesh.mus+mesh.mua));
             end
+        end
+        % ---- End of Baptiste edit
+
+        % ---- Edit by Baptiste Jayet (20/02/2023)
+        % Addition of a melanin field
+        if isfield(mesh,'mel')
+            melNodes = find(mesh.mel);
+            mua = calc_mua_mel(mesh.wv(ind_wv),mesh.fmel(melNodes));
+            mesh.mua(melNodes) = mua;
         end
         % ---- End of Baptiste edit
 
