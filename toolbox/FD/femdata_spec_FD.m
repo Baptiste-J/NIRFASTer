@@ -214,12 +214,16 @@ end
 
 %% Now calculate sources vector for those active in mesh.link
 
+% --- EDIT Baptiste (08/11/2023)
+% Moving all of the edit inside the loop because when there are 0s in the
+% mesh.link matrix the qvec matrix is empty
 qvec = gen_sources(mesh);
 
 %% Catch zero frequency (CW) here
 if frequency == 0
     qvec = real(qvec);
 end
+% --- END EDIT (08/11/2023)
 
 %% LOOP THROUGH WAVELENGTHS
 
@@ -259,6 +263,19 @@ for ind_wv = 1:length(mesh.wv)
         end
         % ---- End of Baptiste edit
 
+        % Now calculate sources vector for those active in mesh.link
+
+% % %         % --- EDIT Baptiste (08/11/2023)
+% % %         % Moving all of the edit inside the loop because when there are 0s in the
+% % %         % mesh.link matrix the qvec matrix is empty
+% % %         qvec = gen_sources(mesh);
+% % % 
+% % %         % Catch zero frequency (CW) here
+% % %         if frequency == 0
+% % %             qvec = real(qvec);
+% % %         end
+% % %         % --- END EDIT (08/11/2023)
+        
         % make FEM matrices
         if isCUDA
             if isfield(OPTIONS,'GPU')
